@@ -12,13 +12,13 @@ General Introduction:
     * in the competition, student will race their models against each others RL models
 """
 
-from time import time
 import torch
 import simstar
 import numpy as np
+from time import time
 from simstarEnv import SimstarEnv
 from collections import namedtuple
-from model import Model
+from sac_agent import Model
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
