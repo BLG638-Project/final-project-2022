@@ -8,7 +8,7 @@ import os
 from tensorboardX import SummaryWriter
 from collections import namedtuple
 from simstarEnv import SimstarEnv
-from sac_agent import Model
+from model import Model
 
 
 # training mode: 1      evaluation mode: 0
@@ -73,11 +73,11 @@ def train():
     opponent_positions = [
         simstar.PoseData(1288.012085, -887.185735, yaw=-3.08),
         simstar.PoseData(1289.373901, -878.582336, yaw=-3.08),
-        #simstar.PoseData(1332.184082, -882.888062, yaw=-3.08),
-        #simstar.PoseData(1331.788574, -886.878296, yaw=-3.08),
+        # simstar.PoseData(1332.184082, -882.888062, yaw=-3.08),
+        # simstar.PoseData(1331.788574, -886.878296, yaw=-3.08),
         simstar.PoseData(1347.334717, -878.796082, yaw=-3.08),
-        simstar.PoseData(1347.227051, -888.257629, yaw=-3.08),
-        #simstar.PoseData(1541.123779, -925.822998, yaw=-1.59),
+        # simstar.PoseData(1347.227051, -888.257629, yaw=-3.08),
+        # simstar.PoseData(1541.123779, -925.822998, yaw=-1.59),
     ]
 
     opponent_count = len(opponent_positions)
@@ -91,7 +91,7 @@ def train():
         port=PORT,
         opponent_pose_data=opponent_positions,
         num_opponents=opponent_count,
-        create_track=False,
+        create_track=False,  # If racing track is already loaded, you can set this to False
     )
 
     insize = 4 + env.track_sensor_size + env.opponent_sensor_size
