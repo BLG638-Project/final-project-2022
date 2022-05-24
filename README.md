@@ -1,12 +1,14 @@
-# Deep Reinforcement Learning Lecture Final Racing Project
+# Deep Reinforcement Learning Final Racing Project
 Final Project of Istanbul Technical University BLG-638E (Deep Reinforcement Learning) Lecture
 
 ## How to set up
 
 ### Simstar
 
-- Install Simstar using the link below
-  `LINK HERE`
+- Install Simstar using the drive link below
+  ```
+  LINK HERE
+  ```
 
 #### Windows
 
@@ -20,11 +22,14 @@ Final Project of Istanbul Technical University BLG-638E (Deep Reinforcement Lear
   ```
 
 - Run below commands to make Simstar executable
-  - To run Simstar without rendering, use -RenderOffScreen flag
-  - To change Simstar's port, use -api_port=XXXX flag
+    - To run Simstar without rendering, use -RenderOffScreen flag
+    - To change Simstar's port, use -api_port=XXXX flag
     ```
     cd Simstar
     chmod 777 -R \*
+    ```
+    - Simstar has to be opened parallel in another terminal at each new training or evaluation.
+    ```
     ./Simstar.sh
     ```
 
@@ -35,7 +40,7 @@ Final Project of Istanbul Technical University BLG-638E (Deep Reinforcement Lear
 #### Option 1: Install using Anaconda
 Create a new environment using anaconda. 
 ```
-conda env create -n simstar-env python=3.7
+conda env create -n simstar-env python=3.8
 ```
 ```
 conda activate simstar-env
@@ -56,7 +61,7 @@ pip install -r requirements.txt
   ```
 - Install Simstar client from inside PythonAPI using
   ```
-  python setup.py install --user
+  python setup.py install
   ```
 
 ## Pytorch Version
@@ -109,10 +114,13 @@ Open the simstar executable, allow for networking if asked.
 * A final evaluation of the models will be similar to that of given in 'training_example/evaluate.py'.
 * For being fair, it is required that a size of the observation space **are not changed** during training and evaluation.
 * The order of observation space variables are also **should be fixed**.
+* Initial positions of other opponent vehicles could be changed as desired during training; however during the final evaluation, opponent vehicles will be models of other teams so the position of those each agent vehicle is determined by lap time.
 
 ### 3. Test Environment Setup
 
 ```
 cd training_example
+```
+```
 python train.py
 ```
