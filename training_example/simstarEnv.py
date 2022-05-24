@@ -92,7 +92,7 @@ class SimstarEnv(gym.Env):
             simstar.TransportError: Raised when connection could not be set up with SimStar
         """
 
-        self.c_w = 0.01  # out of track penalty weight
+        self.c_w = 0.02  # out of track penalty weight
 
         self.add_opponents = add_opponents  # True: adds opponent vehicles; False: removes opponent vehicles
         self.number_of_opponents = num_opponents  # agent_locations, agent_speeds, and lane_ids sizes has to be the same
@@ -117,7 +117,7 @@ class SimstarEnv(gym.Env):
         self.ego_start_offset = (
             25  # ego vehicle's offset from the starting point of the road
         )
-        self.default_speed = 120  # km/hr
+        self.default_speed = 160  # km/hr
         self.set_ego_speed = 60  # km/hr
         self.road_width = 14  # meters
 
@@ -154,7 +154,7 @@ class SimstarEnv(gym.Env):
             self.saver = SaveEpisode()
 
         try:
-            self.client = simstar.Client(host=self.host, port=self.port)
+            self.client = simstar.Client(host=self.host, port=self.port, timeout=20)
             self.client.ping()
         except simstar.TimeoutError or simstar.TransportError:
             raise simstar.TransportError(
@@ -162,10 +162,10 @@ class SimstarEnv(gym.Env):
                 % (self.port)
             )
 
-        print("[SimstarEnv] initializing environment")
+        print("[SimstarEnv] initializing environment, this may take a while...")
         if create_track:
             self.client.open_env(self.track_name)
-            time.sleep(5)
+            time.sleep(20)
         else:
             old_vehicles = []
             all_info = self.client.get_vehicle_ground_truths()
@@ -212,7 +212,7 @@ class SimstarEnv(gym.Env):
 
     def reset(self):
         print("[SimstarEnv] actors are destroyed")
-        time.sleep(0.5)
+        time.sleep(0.25)
 
         if self.save:
             self.saver.reset()
@@ -289,23 +289,28 @@ class SimstarEnv(gym.Env):
             for i in range(self.number_of_opponents):
                 new_agent = None
 
-                if self.opponent_poses:
-                    new_agent = self.client.spawn_vehicle_to(
-                        vehicle_pose=self.opponent_poses[i],
-                        initial_speed=0,
-                        set_speed=self.agent_speeds[i],
-                        vehicle_type=simstar.EVehicleType.F1Racing,
+                try:
+                    if self.opponent_poses:
+                        new_agent = self.client.spawn_vehicle_to(
+                            vehicle_pose=self.opponent_poses[i],
+                            initial_speed=0,
+                            set_speed=self.agent_speeds[i],
+                            vehicle_type=simstar.EVehicleType.F1Racing,
+                        )
+                    else:
+                        new_agent = self.client.spawn_vehicle(
+                            actor=self.main_vehicle,
+                            distance=self.agent_locations[i],
+                            lane_id=self.lane_ids[i],
+                            initial_speed=0,
+                            set_speed=self.agent_speeds[i],
+                            vehicle_type=simstar.EVehicleType.F1Racing,
+                        )
+                except IndexError as e:
+                    print(
+                        "[SimstarEnv] agent_locations, agent_speeds, and lane_ids"
+                        + "sizes has to be the same with number of opponents"
                     )
-                else:
-                    new_agent = self.client.spawn_vehicle(
-                        actor=self.main_vehicle,
-                        distance=self.agent_locations[i],
-                        lane_id=self.lane_ids[i],
-                        initial_speed=0,
-                        set_speed=self.agent_speeds[i],
-                        vehicle_type=simstar.EVehicleType.F1Racing,
-                    )
-
                 self.simstar_step()
                 track_sensor = new_agent.add_sensor(
                     simstar.ESensorType.Distance, track_sensor_settings
@@ -363,14 +368,14 @@ class SimstarEnv(gym.Env):
 
         if np.abs(trackPos) >= 0.9:
             print("[SimstarEnv] finish episode due to road deviation")
-            reward = -100
+            reward = -300
             summary["end_reason"] = "road_deviation"
             done = True
 
         if progress < self.termination_limit_progress:
             if self.terminal_judge_start < self.time_step_slow:
                 print("[SimstarEnv] finish episode due to agent is too slow")
-                reward = -20
+                reward = -100
                 summary["end_reason"] = "too_slow"
                 done = True
         else:
@@ -553,7 +558,9 @@ class SimstarEnv(gym.Env):
     def __del__(self):
         # reset sync mod so that user can interact with simstar
         if self.synronized_mode:
-            self.client.set_sync_mode(False)
+            pass
+            # TODO: reset sync mod gives timeout, fix
+            # self.client.set_sync_mode(False)
 
         if self.save:
             del self.saver
