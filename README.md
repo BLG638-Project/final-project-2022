@@ -28,9 +28,13 @@ Final Project of Istanbul Technical University BLG-638E (Deep Reinforcement Lear
     cd Simstar
     chmod 777 -R \*
     ```
-    - Simstar has to be opened parallel in another terminal at each new training or evaluation.
+    - Simstar has to be running during training or evaluation.
     ```
     ./Simstar.sh
+    ```
+    - Open Simstar without rendering.
+    ```
+    ./Simstar.sh -RenderOffScreen
     ```
 
 ## Requirements
@@ -80,11 +84,11 @@ Open the simstar executable, allow for networking if asked.
 
 ### 2. Sensors
 
-* a) Speed Sensor: 
+* a) Speed Sensor:
     * Vehicle's lateral and longitudinal velocity in km/h.
     * Resultant normalized velocity is given to the observation state at each step.
 
-* b) Track Sensor: 
+* b) Track Sensor:
     * It get the limits of the road ends with radar reflections.
     * An agent could be able to identify the road curvature and boundaries.
     * The observable distance is between 0.2 meters and 200 meters.
@@ -93,21 +97,21 @@ Open the simstar executable, allow for networking if asked.
 
 ![track_sensor](PythonAPI/img/track_sensor.png)
 
-* c) Angle Sensor: 
-    * Vehicle's deviation angle from road center lane in radians.
-    * Left and right deviations from the track center lane is positive and negative respectively.
+* c) Angle Sensor:
+    * Vehicle's deviation angle from road's center lane in radians.
+    * Left and right deviations from the track's center lane is positive and negative respectively.
 
-* d) Opponents Sensor: 
+* d) Opponents Sensor:
     * It is similar to that of a Track Sensor, but it gets radar reflections from only other racing vehicles (agents).
     * By using this sensor, an agent will have an observation of other vehicles' distance and angle of presence in terms in vectoral state.
-    * The observable distance range is 200 meters.
+    * The observable distance range is 20 meters.
     * Field-of-view of the track sensor is 216 degrees.
     * The size of the observation is 18-dimensional list of normalized scalar values. As a result, each scalar represents a radar output of 12 degrees angle in 2D plane.
 
 ![track_sensor](PythonAPI/img/opponents_sensor.png)
 
-* e) Track Position Sensor: 
-    * Vehicle's lateral deviation from the road center lane in meters.
+* e) Track Position Sensor:
+    * Vehicle's lateral deviation from the road's center lane in meters.
 
 **NOTE**:
 * The sensor locations, constants, and parameters **should not** be changed or modified as during the evaluation or training of the models. Given sensor calibrations and constants will be used.
