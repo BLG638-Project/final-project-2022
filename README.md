@@ -44,7 +44,7 @@ Final Project of Istanbul Technical University BLG-638E (Deep Reinforcement Lear
 #### Option 1: Install using Anaconda
 Create a new environment using anaconda. 
 ```
-conda env create -n simstar-env python=3.8
+conda create --name simstar-env python=3.8
 ```
 ```
 conda activate simstar-env
