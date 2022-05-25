@@ -409,7 +409,7 @@ class SimstarEnv(gym.Env):
             self.saver.save_step(control_inputs, simstar_obs, self.main_vehicle.tag)
             # save agents
             actions = self.get_agent_actions()
-            raw_obs = self.get_agent_observations()
+            raw_obs = self.get_agent_observations(raw=True)
             for v, vehicle in enumerate(self.actor_list):
                 if vehicle.get_ID() == self.main_vehicle.get_ID():
                     continue
@@ -519,12 +519,16 @@ class SimstarEnv(gym.Env):
             trackPos=np.array(simstar_obs["trackPos"], dtype=np.float32) / 1.0,
         )
 
-    def get_agent_observations(self):
+    def get_agent_observations(self, raw=False):
         states = []
         for vehicle in self.actor_list:
             if vehicle.get_ID() != self.main_vehicle.get_ID():
                 raw_state = self.get_simstar_obs(vehicle)
-                states.append(raw_state)
+                if raw:
+                    states.append(raw_state)
+                else:
+                    pretty = self.make_observation(raw_state)
+                    states.append(pretty)
 
         return states
 
