@@ -26,7 +26,7 @@ Final Project of Istanbul Technical University BLG-638E (Deep Reinforcement Lear
     - To change Simstar's port, use -api_port=XXXX flag
     ```
     cd Simstar
-    chmod 777 -R \*
+    chmod 777 -R *
     ```
     - Simstar has to be running during training or evaluation.
     ```
@@ -61,7 +61,7 @@ pip install -r requirements.txt
 
 - Install the requirements
   ```
-  pip install -r requirements.txt
+  pip install -r PythonAPI/requirements.txt
   ```
 - Install Simstar client from inside PythonAPI using
   ```
