@@ -1,7 +1,7 @@
 matplotlib==3.1.3
 msgpack==1.0.3
 rpc-msgpack==0.6.0
-numpy==1.18.1
+numpy==1.21.0
 overpy==0.4
 tornado==6.1
 utm==0.5.0
