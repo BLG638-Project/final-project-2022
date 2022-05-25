@@ -8,7 +8,7 @@ import os
 from tensorboardX import SummaryWriter
 from collections import namedtuple
 from simstarEnv import SimstarEnv
-from model import Model
+from sac_agent import Model
 
 
 # training mode: 1      evaluation mode: 0
