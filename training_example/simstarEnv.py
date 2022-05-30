@@ -212,7 +212,7 @@ class SimstarEnv(gym.Env):
 
     def reset(self):
         print("[SimstarEnv] actors are destroyed")
-        time.sleep(0.25)
+        time.sleep(0.5)
 
         if self.save:
             self.saver.reset()

@@ -1,6 +1,10 @@
 # Deep Reinforcement Learning Final Racing Project
 Final Project of Istanbul Technical University BLG-638E (Deep Reinforcement Learning) Lecture
 
+## Racing Demonstration
+
+![opening_screen](PythonAPI/img/demo_video.gif)
+
 ## How to set up
 
 ### Simstar
@@ -35,6 +39,10 @@ Final Project of Istanbul Technical University BLG-638E (Deep Reinforcement Lear
     - Open Simstar without rendering.
     ```
     ./Simstar.sh -RenderOffScreen
+    ```
+    or
+    ```
+    ./Simstar.sh -nullrhi
     ```
 
 ## Requirements

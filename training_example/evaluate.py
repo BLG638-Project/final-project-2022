@@ -6,10 +6,9 @@ General Introduction:
     * students should give path to their best models in LOAD_CUSTOM_MODEL
     * opponent vehicle number could be changed in OPPONENT_NUM and their initial racing positions in AGENT_LOCATIONS
     * by changing CONTROL_OTHER_AGENTS boolean students could evaluate their models against default RL trained model or IDM (autopilot) vehicles
-    * there are already designed bult-in tracks which could be changed from the list: [HungaryGrandPrix, DutchGrandPrix, CircularRoad, StraightRoad]
     * its important to modify load_checkpoint() function if your model's network structure is not default Soft-Actor-Critic Network
     * evaluation in each step is done until NUM_EVAL_STEPS iteration number is reached, however this could be changed
-    * in the competition, student will race their models against each others RL models
+    * in the competition, student will race their models against each others' RL models
 """
 
 import torch
