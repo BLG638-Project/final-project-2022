@@ -68,7 +68,7 @@ class SimstarEnv(gym.Env):
         host="127.0.0.1",
         port=8080,
         save=False,
-        ego_driving_type=simstar.DriveType.API,
+        ego_driving_type=simstar.DriveType.API, # NOTE: Keyboard: (for manual driving) and API: (for driving via API)
         create_track=True,
         opponent_pose_data=[],
     ):
