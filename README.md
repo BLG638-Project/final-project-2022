@@ -9,9 +9,9 @@ Final Project of Istanbul Technical University BLG-638E (Deep Reinforcement Lear
 
 ### Simstar
 
-- Install Simstar using the drive link below
+- Install Simstar using the drive link below to download v2.1.1
   ```
-  https://drive.google.com/drive/folders/1dV3Vgq1SBPTzTd8Lg8L4zffaQDZy5BvN?usp=sharing 
+  https://drive.google.com/drive/folders/1dVXsVtvj7-e9WsC_dOMl4J36X5niuWXw
   ```
 
 #### Windows
