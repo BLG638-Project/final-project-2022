@@ -24,16 +24,16 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # user's own best model could be loaded from saved_models folder
 # TODO: right now default model is loaded, however users should evaluate their own models
-LOAD_CUSTOM_MODEL = "default_model/best_253953.dat"
+LOAD_CUSTOM_MODEL = "default_model/default_model.dat"
 
 # default model is trained with given sac agent code and training is breaked at 320K steps
-LOAD_DEFAULT_MODEL = "default_model/best_253953.dat"
+LOAD_DEFAULT_MODEL = "default_model/default_model.dat"
 
-NUM_EVAL_EPISODE = 5
+NUM_EVAL_EPISODE = 2
 NUM_EVAL_STEPS = 4000
 
 ADD_OPPONENTS = True
-OPPONENT_NUM = 5
+OPPONENT_NUM = 3
 
 # True: controls opponent vehicles with loaded default model weights
 # False: opponent vehicles will be controled with IDM (Intelligent Driver Model)
@@ -41,11 +41,9 @@ CONTROL_OTHER_AGENTS = True
 
 # initial locations of the opponents is defined pose data in the simulator
 AGENT_LOCATIONS = [
-    simstar.PoseData(1288.012085, -887.185735, yaw=-3.08),
-    simstar.PoseData(1289.373901, -878.582336, yaw=-3.08),
-    simstar.PoseData(1347.334717, -878.796082, yaw=-3.08),
-    simstar.PoseData(1347.227051, -888.257629, yaw=-3.08),
-    simstar.PoseData(1541.123779, -925.822998, yaw=-1.59),
+    simstar.PoseData(1402.143066, -880.167114, yaw=-3.08),
+    simstar.PoseData(1269.950562, -888.293701, yaw=-3.08),
+    simstar.PoseData(1046.40271, -887.010681, yaw=-3.10),
 ]
 if CONTROL_OTHER_AGENTS:
     AGENT_INIT_SPEEDS = [0, 0, 0, 0, 0]
@@ -61,7 +59,7 @@ def evaluate(port=8080):
         add_opponents=ADD_OPPONENTS,
         num_opponents=OPPONENT_NUM,
         opponent_pose_data=AGENT_LOCATIONS,
-        speed_up=1,
+        speed_up=2,
         synronized_mode=True,
     )
 
@@ -89,13 +87,13 @@ def evaluate(port=8080):
 
     # load actor network from checkpoint
     agent = Model(env=env, params=hyprm, n_insize=insize, n_outsize=outsize)
-    load_checkpoint(agent)
+    load_checkpoint(agent,LOAD_CUSTOM_MODEL)
 
     if CONTROL_OTHER_AGENTS:
         opponent_agent = Model(
             env=env, params=hyprm, n_insize=insize, n_outsize=outsize
         )
-        load_checkpoint(opponent_agent)
+        load_checkpoint(opponent_agent,LOAD_DEFAULT_MODEL)
 
     total_reward = 0
     start_time = time()
@@ -121,6 +119,10 @@ def evaluate(port=8080):
             env.set_agent_actions(agent_actions)
 
         obs, reward, done, summary = env.step(action)
+        
+        # get other agent observation
+        agent_observations = env.get_agent_observations()
+        
         progress = env.get_progress_on_road()
         next_state = np.hstack(
             (
@@ -149,8 +151,7 @@ def evaluate(port=8080):
                 agent_action = np.array(opponent_agent.select_action(state=agent_state))
                 agent_actions.append(agent_action)
 
-            # get other agent observation
-            agent_observations = env.get_agent_observations()
+            
 
         epsisode_reward += reward
 
@@ -166,15 +167,15 @@ def evaluate(port=8080):
         state = next_state
 
 
-def load_checkpoint(agent):
+def load_checkpoint(agent,path):
     try:
-        checkpoint = torch.load(LOAD_CUSTOM_MODEL)
+        checkpoint = torch.load(path)
         print("keys are: ", checkpoint.keys())
 
         agent.actor.load_state_dict(checkpoint["actor_state_dict"])
         agent.critic_1.load_state_dict(checkpoint["critic_1_state_dict"])
         agent.critic_2.load_state_dict(checkpoint["critic_2_state_dict"])
-
+        agent.eval()
         if "epsisode_reward" in checkpoint:
             reward = float(checkpoint["epsisode_reward"])
     
