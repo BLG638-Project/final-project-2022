@@ -1,0 +1,11 @@
+Default Model Trained & Changed Parameters:
+
+* only use 2 other agents in the front.
+
+* use 6x speed-up
+
+* increase negative reward (penalty) for too_slow to -500
+
+* increase negative reward (penalty) for road_deviation to -500
+
+* change trackPos termination limit from 0.9 to 0.7
