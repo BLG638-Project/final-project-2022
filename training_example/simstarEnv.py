@@ -198,6 +198,8 @@ class SimstarEnv(gym.Env):
         self.action_space = spaces.Box(low=-1.0, high=1.0, shape=(2,))
         self.default_action = [0.0, 1.0]
 
+        self.prev_angle = 0.0
+
         self.last_step_time = time.time()
         self.apply_settings()
 
@@ -484,6 +486,12 @@ class SimstarEnv(gym.Env):
 
         # deviation from road in radians
         angle = float(road_deviation["yaw_dev"])
+
+        # hot fix for very rare angle observation difference
+        if (abs(self.prev_angle - angle)>=(np.pi/2)):
+            angle = self.prev_angle
+
+        self.prev_angle = angle
 
         # deviation from road center in meters
         trackPos = float(road_deviation["lat_dev"]) / self.road_width
