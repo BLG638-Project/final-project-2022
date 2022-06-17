@@ -7,7 +7,7 @@ tornado==6.1
 utm==0.5.0
 openrouteservice==2.3.0
 ipykernel==4.10.1
-notebook==6.4.10
+notebook==6.4.12
 easydict==1.9
 google==3.0.0
 protobuf==3.15.0
